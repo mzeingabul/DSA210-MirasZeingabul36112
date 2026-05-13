@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA210 — Lifestyle & Academic Productivity</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e10;
+    --surface: #16161a;
+    --border: #2a2a30;
+    --accent: #c8a96e;
+    --accent2: #7eb8c9;
+    --text: #e8e6e0;
+    --muted: #888880;
+    --danger: #d4685a;
+    --success: #6aab7e;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(200,169,110,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.25rem 0.75rem;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.1s;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.25s;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 560px;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.4s;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.55s;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .meta-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .meta-value {
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 5rem 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 400;
+    margin-bottom: 2rem;
+    line-height: 1.2;
+  }
+
+  p {
+    color: var(--muted);
+    max-width: 680px;
+    margin-bottom: 1rem;
+  }
+
+  /* ── STATS GRID ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 3rem 0;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .stat-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.4rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── HYPOTHESIS TABLE ── */
+  .hyp-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+
+  .hyp-row {
+    background: var(--surface);
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto auto;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.2rem 1.5rem;
+    transition: background 0.2s;
+  }
+
+  .hyp-row:hover { background: #1c1c22; }
+
+  .hyp-id {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--accent);
+  }
+
+  .hyp-text {
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+
+  .hyp-stat {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .badge {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .badge-sig { background: rgba(106,171,126,0.15); color: var(--success); border: 1px solid rgba(106,171,126,0.3); }
+
+  /* ── ML RESULTS ── */
+  .model-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 2rem 0;
+  }
+
+  .model-row {
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .model-name {
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+
+  .model-name.best { color: var(--accent); font-weight: 500; }
+
+  .bar-wrap {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--accent);
+    transition: width 1s ease;
+  }
+
+  .bar-fill.dim { background: #3a3a44; }
+
+  .model-score {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: right;
+    white-space: nowrap;
+    min-width: 80px;
+  }
+
+  /* ── FEATURE IMPORTANCE ── */
+  .feature-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .feature-row {
+    display: grid;
+    grid-template-columns: 160px 1fr auto;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .feature-name {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: 'DM Sans', monospace;
+  }
+
+  .feature-name.top { color: var(--accent); }
+
+  /* ── FINDINGS ── */
+  .findings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+
+  .finding-card {
+    background: var(--surface);
+    padding: 2rem;
+    position: relative;
+  }
+
+  .finding-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .finding-text {
+    font-size: 0.9rem;
+    color: var(--muted);
+    max-width: none;
+    margin: 0;
+  }
+
+  .finding-highlight {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .footer-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-text {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .gh-link {
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(200,169,110,0.3);
+    padding-bottom: 1px;
+    transition: border-color 0.2s;
+  }
+
+  .gh-link:hover { border-color: var(--accent); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+    margin: 2rem 0;
+    opacity: 0.4;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .hyp-row { grid-template-columns: 2rem 1fr; }
+    .hyp-stat { display: none; }
+    .model-row { grid-template-columns: 140px 1fr auto; }
+    .feature-row { grid-template-columns: 130px 1fr auto; }
+    .footer-inner { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="tag">DSA 210 · Spring 2026</div>
+    <h1>Lifestyle Factors &<br><em>Academic Productivity</em></h1>
+    <p class="hero-sub">A self-tracking longitudinal analysis examining how stress, sleep, and motivation shape weekly academic performance over a semester.</p>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-label">Weeks tracked</span>
+        <span class="meta-value">10</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Variables</span>
+        <span class="meta-value">6 behavioral</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Hypotheses</span>
+        <span class="meta-value">5 / 5 significant</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Best model R²</span>
+        <span class="meta-value">0.928</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section>
+  <div class="section-inner reveal">
+    <div class="section-label">Overview</div>
+    <h2>The Question</h2>
+    <p>Do lifestyle and adaptation factors significantly influence academic productivity during the semester? This project investigates that question through ten weeks of personal self-tracking — collecting real data on sleep, stress, study hours, motivation, and language difficulty alongside academic performance.</p>
+    <p>The academic calendar was used as an external enrichment source to classify weeks as regular or midterm, enabling direct behavioral comparison across different phases of academic pressure.</p>
+    <div class="divider"></div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-number">52.4%</span>
+        <span class="stat-label">Average productivity</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">44.5%</span>
+        <span class="stat-label">Midterm week avg.</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">54.4%</span>
+        <span class="stat-label">Regular week avg.</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">−0.96</span>
+        <span class="stat-label">Stress correlation</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">+0.88</span>
+        <span class="stat-label">Sleep correlation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HYPOTHESIS TESTING -->
+<section>
+  <div class="section-inner reveal">
+    <div class="section-label">Hypothesis Testing</div>
+    <h2>All Five Hypotheses<br>Were Significant</h2>
+    <p>Pearson correlations, an independent t-test, and Spearman correlation were used at α = 0.05. Every hypothesis was rejected in favour of the alternative.</p>
+
+    <div class="hyp-grid">
+      <div class="hyp-row">
+        <span class="hyp-id">H1</span>
+        <span class="hyp-text">Study hours → productivity (exam confounding effect)</span>
+        <span class="hyp-stat">r = −0.85 · p = 0.002</span>
+        <span class="badge badge-sig">Significant</span>
+      </div>
+      <div class="hyp-row">
+        <span class="hyp-id">H2</span>
+        <span class="hyp-text">More sleep → higher productivity</span>
+        <span class="hyp-stat">r = +0.88 · p = 0.001</span>
+        <span class="badge badge-sig">Significant</span>
+      </div>
+      <div class="hyp-row">
+        <span class="hyp-id">H3</span>
+        <span class="hyp-text">Higher stress → lower productivity</span>
+        <span class="hyp-stat">r = −0.96 · p &lt; 0.001</span>
+        <span class="badge badge-sig">Significant</span>
+      </div>
+      <div class="hyp-row">
+        <span class="hyp-id">H4</span>
+        <span class="hyp-text">Midterm weeks significantly lower productivity</span>
+        <span class="hyp-stat">t = 4.79 · p = 0.001</span>
+        <span class="badge badge-sig">Significant</span>
+      </div>
+      <div class="hyp-row">
+        <span class="hyp-id">H5</span>
+        <span class="hyp-text">Higher motivation → higher productivity</span>
+        <span class="hyp-stat">ρ = 0.74 · p = 0.015</span>
+        <span class="badge badge-sig">Significant</span>
+      </div>
+    </div>
+
+    <p>A notable finding: H1 showed a significant <em>negative</em> correlation between study hours and productivity. This is explained by the exam-week confounding effect — study hours spike to ~25 hrs/week during midterms precisely when productivity is lowest due to stress and sleep deprivation.</p>
+  </div>
+</section>
+
+<!-- ML RESULTS -->
+<section>
+  <div class="section-inner reveal">
+    <div class="section-label">Machine Learning</div>
+    <h2>Regression &<br>Classification</h2>
+    <p>Five regression models and three classifiers were evaluated using Leave-One-Out Cross-Validation, appropriate for the small sample size of n = 10.</p>
+
+    <div class="divider"></div>
+    <p style="font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem;">Regression — R² Score (higher = better)</p>
+    <div class="model-grid">
+      <div class="model-row">
+        <span class="model-name best">Linear Regression</span>
+        <div class="bar-wrap"><div class="bar-fill" style="width:92.8%"></div></div>
+        <span class="model-score">R² = 0.928 · RMSE 1.231</span>
+      </div>
+      <div class="model-row">
+        <span class="model-name">Ridge</span>
+        <div class="bar-wrap"><div class="bar-fill dim" style="width:91.5%"></div></div>
+        <span class="model-score">R² = 0.915 · RMSE 1.341</span>
+      </div>
+      <div class="model-row">
+        <span class="model-name">Lasso</span>
+        <div class="bar-wrap"><div class="bar-fill dim" style="width:91.4%"></div></div>
+        <span class="model-score">R² = 0.914 · RMSE 1.348</span>
+      </div>
+      <div class="model-row">
+        <span class="model-name">Gradient Boosting</span>
+        <div class="bar-wrap"><div class="bar-fill dim" style="width:80.4%"></div></div>
+        <span class="model-score">R² = 0.804 · RMSE 2.032</span>
+      </div>
+      <div class="model-row">
+        <span class="model-name">Random Forest</span>
+        <div class="bar-wrap"><div class="bar-fill dim" style="width:80.1%"></div></div>
+        <span class="model-score">R² = 0.801 · RMSE 2.048</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <p style="font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem;">Classification — Accuracy (random baseline = 50%)</p>
+    <div class="model-grid">
+      <div class="model-row">
+        <span class="model-name best">Logistic Regression</span>
+        <div class="bar-wrap"><div class="bar-fill" style="width:60%"></div></div>
+        <span class="model-score">60%</span>
+      </div>
+      <div class="model-row">
+        <span class="model-name">Random Forest</span>
+        <div class="bar-wrap"><div class="bar-fill dim" style="width:40%"></div></div>
+        <span class="model-score">40%</span>
+      </div>
+      <div class="model-row">
+        <span class="model-name">Gradient Boosting</span>
+        <div class="bar-wrap"><div class="bar-fill dim" style="width:30%"></div></div>
+        <span class="model-score">30%</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <p style="font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem;">Feature Importance — Random Forest</p>
+    <div class="feature-grid">
+      <div class="feature-row">
+        <span class="feature-name top">stress_level</span>
+        <div class="bar-wrap"><div class="bar-fill" style="width:100%"></div></div>
+        <span class="model-score">0.329</span>
+      </div>
+      <div class="feature-row">
+        <span class="feature-name">language_difficulty</span>
+        <div class="bar-wrap"><div class="bar-fill dim" style="width:51%"></div></div>
+        <span class="model-score">0.167</span>
+      </div>
+      <div class="feature-row">
+        <span class="feature-name">study_hours</span>
+        <div class="bar-wrap"><div class="bar-fill dim" style="width:45%"></div></div>
+        <span class="model-score">0.147</span>
+      </div>
+      <div class="feature-row">
+        <span class="feature-name">sleep_avg</span>
+        <div class="bar-wrap"><div class="bar-fill dim" style="width:42%"></div></div>
+        <span class="model-score">0.139</span>
+      </div>
+      <div class="feature-row">
+        <span class="feature-name">motivation_level</span>
+        <div class="bar-wrap"><div class="bar-fill dim" style="width:33%"></div></div>
+        <span class="model-score">0.110</span>
+      </div>
+      <div class="feature-row">
+        <span class="feature-name">is_midterm</span>
+        <div class="bar-wrap"><div class="bar-fill dim" style="width:33%"></div></div>
+        <span class="model-score">0.108</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINDINGS -->
+<section>
+  <div class="section-inner reveal">
+    <div class="section-label">Key Findings</div>
+    <h2>What the Data Says</h2>
+
+    <div class="findings-grid">
+      <div class="finding-card">
+        <div class="finding-number">01</div>
+        <p class="finding-text"><span class="finding-highlight">Stress is the dominant predictor</span> of academic productivity — with a correlation of −0.96, it explains most of the variance in weekly performance.</p>
+      </div>
+      <div class="finding-card">
+        <div class="finding-number">02</div>
+        <p class="finding-text">Midterm weeks drop productivity by <span class="finding-highlight">~10 percentage points</span> on average (54.4% → 44.5%), even when study hours are 2.5× higher.</p>
+      </div>
+      <div class="finding-card">
+        <div class="finding-number">03</div>
+        <p class="finding-text"><span class="finding-highlight">More studying ≠ more productivity.</span> Exam week study effort shows diminishing returns under high stress and sleep deprivation.</p>
+      </div>
+      <div class="finding-card">
+        <div class="finding-number">04</div>
+        <p class="finding-text">Behavioral variables collectively explain <span class="finding-highlight">92.8% of productivity variance</span> — a strong result for a self-tracking single-subject study.</p>
+      </div>
+      <div class="finding-card">
+        <div class="finding-number">05</div>
+        <p class="finding-text"><span class="finding-highlight">Simpler models win.</span> Linear Regression outperforms ensemble methods, confirming that small datasets favor interpretable approaches.</p>
+      </div>
+      <div class="finding-card">
+        <div class="finding-number">06</div>
+        <p class="finding-text">Language difficulty is the <span class="finding-highlight">second most important feature</span>, reflecting the cognitive burden of studying in a second language throughout the semester.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <p class="footer-text">DSA 210 · Introduction to Data Science · Spring 2026</p>
+    <a href="https://github.com/mzeingabul/DSA210-MirasZeingabul36112" class="gh-link" target="_blank">View on GitHub →</a>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
